@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { Client, useClient } from "@xmtp/react-sdk";
 import { ConversationContainer } from "./ConversationContainer";
@@ -219,7 +219,7 @@ export default function Home({
     setIsOpen(false);
   };
 
-  if (typeof window !== undefined) {
+  if (typeof window !== "undefined") {
     window.FloatingInbox = {
       open: openWidget,
       close: closeWidget,
