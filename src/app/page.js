@@ -1,95 +1,147 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import React, { useState, useEffect } from "react";
+import { FloatingInbox } from "./FloatingInbox-hooks";
+import { ethers } from "ethers";
 
-export default function Home() {
+const InboxPage = () => {
+  const [signer, setSigner] = useState(null);
+  const [walletConnected, setWalletConnected] = useState(false); // Add state for wallet connection
+
+  const disconnectWallet = () => {
+    localStorage.removeItem("walletConnected");
+    localStorage.removeItem("signerAddress");
+    setSigner(null);
+    setWalletConnected(false);
+  };
+
+  const styles = {
+    uContainer: {
+      height: "100vh",
+      backgroundColor: "#f9f9f9",
+      borderRadius: "10px",
+      boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+      zIndex: "1000",
+      overflow: "hidden",
+      display: "flex",
+      flexDirection: "column",
+    },
+    xmtpContainer: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100%",
+    },
+    btnXmtp: {
+      backgroundColor: "#f0f0f0",
+      display: "flex",
+      alignItems: "center",
+      textDecoration: "none",
+      color: "#000",
+      justifyContent: "center",
+      border: "1px solid grey",
+      padding: "10px",
+      borderRadius: "5px",
+      fontSize: "14px",
+    },
+    HomePageWrapperStyle: {
+      textAlign: "center",
+      marginTop: "2rem",
+    },
+    ButtonStyledStyle: {
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "10px 20px",
+      borderRadius: "5px",
+      marginBottom: "2px",
+      border: "none",
+      textAlign: "left",
+      cursor: "pointer",
+      transition: "background-color 0.3s ease",
+      color: "#333333",
+      backgroundColor: "#ededed",
+      fontSize: "12px",
+    },
+  };
+
+  const getAddress = async (signer) => {
+    try {
+      return await signer?.getAddress();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const connectWallet = async () => {
+    if (typeof window.ethereum !== undefined) {
+      try {
+        await window.ethereum.request({ method: "eth_requestAccounts" });
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        setSigner(signer);
+        setWalletConnected(true);
+        let address = await getAddress(signer);
+        localStorage.setItem("walletConnected", JSON.stringify(true)); // Save connection status in local storage
+        localStorage.setItem("signerAddress", JSON.stringify(address)); // Save signer address in local storage
+      } catch (error) {
+        console.error("User rejected request", error);
+      }
+    } else {
+      console.error("Metamask not found");
+    }
+  };
+
+  useEffect(() => {
+    const storedWalletConnected = localStorage.getItem("walletConnected");
+    const storedSignerAddress = JSON.parse(
+      localStorage.getItem("signerAddress")
+    );
+    if (storedWalletConnected && storedSignerAddress) {
+      setWalletConnected(JSON.parse(storedWalletConnected));
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      setSigner(signer);
+    }
+  }, []);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+    <div style={styles.HomePageWrapperStyle}>
+      <button
+        className="home-button"
+        style={{ ...styles.ButtonStyledStyle, marginLeft: 10 }}
+        onClick={() => connectWallet()}
+      >
+        {walletConnected ? "Connected" : "Connect Wallet"}
+      </button>
+      {walletConnected && (
+        <button
+          className="home-button"
+          style={{ ...styles.ButtonStyledStyle, marginLeft: 10 }}
+          onClick={() => disconnectWallet()}
         >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+          Logout
+        </button>
+      )}
+      <h1>Floating Inbox </h1>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+      <section className="App-section">
+        <button
+          className="home-button"
+          style={styles.ButtonStyledStyle}
+          onClick={() => window.FloatingInbox.open()}
         >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+          Open
+        </button>
+        <button
+          className="home-button"
+          style={{ ...styles.ButtonStyledStyle, marginLeft: 10 }}
+          onClick={() => window.FloatingInbox.close()}
+        >
+          Close
+        </button>
+      </section>
+      <FloatingInbox env={process.env.REACT_APP_XMTP_ENV} wallet={signer} />
+    </div>
+  );
+};
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+export default InboxPage;
