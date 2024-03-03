@@ -2,13 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import dynamic from "next/dynamic";
-const FloatingInbox = dynamic(
-  () => import("./FloatingInbox-hooks").then((mod) => mod.default),
-  {
-    ssr: false,
-  }
-);
-console.log(FloatingInbox);
+const FloatingInbox = dynamic(() => import("./FloatingInbox-hooks"), {
+  ssr: false,
+});
 
 const InboxPage = () => {
   const [signer, setSigner] = useState(null);
