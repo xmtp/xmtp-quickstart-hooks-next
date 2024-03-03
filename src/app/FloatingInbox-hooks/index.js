@@ -1,7 +1,7 @@
 import Home from "./Home";
 import { XMTPProvider } from "@xmtp/react-sdk";
 
-export function FloatingInbox({
+export default function FloatingInbox({
   isPWA = false,
   wallet,
   onLogout,
