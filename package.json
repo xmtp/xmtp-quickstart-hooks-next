@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@xmtp/react-sdk": "^3.0.0",
+    "@xmtp/react-sdk": "^5.1.0",
     "buffer": "^6.0.3",
     "ethers": "^5.7.0",
     "react": "^18",
