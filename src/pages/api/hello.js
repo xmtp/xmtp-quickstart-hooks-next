@@ -1,5 +1,5 @@
 import { Wallet } from "ethers";
-import { Client } from "@xmtp/xmtp-js";
+import { Client } from "@xmtp/react-sdk";
 
 const sendMessage = async () => {
   const wallet = Wallet.createRandom();
