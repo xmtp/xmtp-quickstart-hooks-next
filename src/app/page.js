@@ -8,6 +8,9 @@ const Subscribe = dynamic(() => import("./Subscribe"), {
 const FloatingInbox = dynamic(() => import("./FloatingInbox-hooks"), {
   ssr: false,
 });
+/*import Subscribe from "./Subscribe";
+import FloatingInbox from "./FloatingInbox-hooks";
+*/
 
 const InboxPage = () => {
   const [signer, setSigner] = useState(null);
