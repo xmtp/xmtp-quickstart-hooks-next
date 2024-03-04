@@ -24,11 +24,10 @@ const sendMessage = async () => {
 };
 
 // src/api/hello.js
-export default function handler(req, res) {
+export default async function handler(req, res) {
   // Call the function to send a message
-  sendMessage().then(() => {
-    console.log("XMTP message operation completed.");
-  });
+  await sendMessage();
+  console.log("XMTP message operation completed.");
 
   res
     .status(200)
