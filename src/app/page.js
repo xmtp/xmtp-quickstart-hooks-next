@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { ethers } from "ethers";
+import dynamic from "next/dynamic";
 const Subscribe = dynamic(() => import("./Subscribe"), {
   ssr: false,
 });
-import dynamic from "next/dynamic";
 const FloatingInbox = dynamic(() => import("./FloatingInbox-hooks"), {
   ssr: false,
 });
@@ -19,6 +19,7 @@ const InboxPage = () => {
     setSigner(null);
     setWalletConnected(false);
   };
+
   const [subscribeArray, setSubscribeArray] = useState([]);
 
   const styles = {

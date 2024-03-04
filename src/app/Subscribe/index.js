@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Client } from "@xmtp/xmtp-js";
 import { ethers } from "ethers";
 
-export function Subscribe({
+export default function Subscribe({
   senderAddress,
   onSubscribe,
   onUnsubscribe,
@@ -108,7 +108,8 @@ export function Subscribe({
   return (
     <div
       style={styles.SubscribeButtonContainer}
-      className={`Subscribe ${loading ? "loading" : ""}`}>
+      className={`Subscribe ${loading ? "loading" : ""}`}
+    >
       <small>Sender address: {senderAddress}</small>
       <button style={styles.SubscribeButton} onClick={handleClick}>
         {loading ? "Loading... " : subscriptionStatus}
