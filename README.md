@@ -3,8 +3,8 @@
 ## Installation
 
 ```bash
-bun install
-bun start
+yarn install
+yarn run dev
 ```
 
 ## Concepts
