@@ -4,7 +4,7 @@
 
 ```bash
 yarn install
-yarn run dev
+yarn dev
 ```
 
 ## Concepts
