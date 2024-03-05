@@ -57,8 +57,7 @@ const MessageItem = ({ message, senderAddress, isPWA = false }) => {
     );
   };
   const renderMessage = (message) => {
-    console.log(message);
-    const date = message.sentAt ? message.sentAt : message.sent;
+    const date = message.sentAt;
     try {
       if (message?.content.length > 0) {
         return (
