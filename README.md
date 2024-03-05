@@ -21,6 +21,14 @@ Head to our docs to understand XMTP's concepts
 
 #### Troubleshooting
 
+For components to work in SSR Nextjs try this Dynamic omport
+
+```jsx
+const FloatingInbox = dynamic(() => import("./FloatingInbox-hooks"), {
+  ssr: false,
+});
+```
+
 If you get into issues with `Buffer` and `polyfills` check out the fix below:
 
 - [Check out Buffer issue](https://github.com/xmtp/xmtp-js/issues/487)
